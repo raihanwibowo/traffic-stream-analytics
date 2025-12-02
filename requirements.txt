@@ -1,0 +1,8 @@
+kafka-python
+psycopg2-binary
+fastapi
+uvicorn
+python-dotenv
+requests
+hypothesis
+clickhouse-driver
