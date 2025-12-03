@@ -1,6 +1,7 @@
 -- Traffic Data Table
 CREATE TABLE IF NOT EXISTS traffic_data (
-    stream_id UUID PRIMARY KEY,
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    stream_id UUID NOT NULL,
     day_month_year VARCHAR(10) NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     location TEXT NOT NULL,
@@ -15,6 +16,9 @@ CREATE TABLE IF NOT EXISTS traffic_data (
     province TEXT,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Index on stream_id for lookups
+CREATE INDEX idx_traffic_stream_id ON traffic_data(stream_id);
 
 -- Time-based queries (most common for analytics)
 CREATE INDEX idx_traffic_timestamp ON traffic_data(timestamp DESC);
