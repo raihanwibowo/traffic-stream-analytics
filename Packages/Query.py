@@ -47,7 +47,7 @@ class QuerySql:
             
         except Exception as e:
             logging.error(f"❌ Failed to insert traffic data: {e}")
-            self.conn.rollba
+            self.conn.rollback()
         except Exception as e:
             logging.error(f"❌ Failed to insert traffic data: {e}")
             self.conn.rollback()
