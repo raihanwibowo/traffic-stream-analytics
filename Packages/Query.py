@@ -29,13 +29,10 @@ class QuerySql:
             # Build query dynamically from configuration
             fields = ', '.join(self.TRAFFIC_DATA_FIELDS)
             placeholders = ', '.join(['%s'] * len(self.TRAFFIC_DATA_FIELDS))
-            update_set = ', '.join([f"{field} = EXCLUDED.{field}" for field in self.TRAFFIC_DATA_UPDATE_FIELDS])
             
             insert_query = f"""
                 INSERT INTO traffic_data ({fields})
                 VALUES ({placeholders})
-                ON CONFLICT ({self.TRAFFIC_DATA_CONFLICT_KEY}) DO UPDATE SET
-                    {update_set}
             """
             
             # Extract values in the same order as fields
@@ -46,8 +43,11 @@ class QuerySql:
             self.conn.commit()
             cur.close()
             
-            logging.info(f"✅ Inserted/Updated traffic data for stream_id: {data.get('stream_id')}")
+            logging.info(f"✅ Inserted traffic data for stream_id: {data.get('stream_id')}")
             
+        except Exception as e:
+            logging.error(f"❌ Failed to insert traffic data: {e}")
+            self.conn.rollba
         except Exception as e:
             logging.error(f"❌ Failed to insert traffic data: {e}")
             self.conn.rollback()
